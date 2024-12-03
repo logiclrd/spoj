@@ -1,0 +1,25 @@
+#!/bin/tcsh
+
+set low=1
+set high=100000
+
+top:
+
+echo 1 $low $high | ./PRIME1 > PRIME1.out
+primes $low $high > primes.out
+
+diff PRIME1.out primes.out
+if ($? != 0) goto bottom
+
+set low=`echo 1+$high|bc`
+set high=`echo 99999+$low|bc`
+
+if ($high <= 1000000000) goto top
+
+goto byebye
+
+bottom:
+
+echo Comparison failed! low=$low, high=$high
+
+byebye:
